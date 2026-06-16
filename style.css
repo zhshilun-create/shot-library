@@ -771,17 +771,16 @@ td {
   }
 
   body.read-only .section-head {
-    position: sticky;
-    top: 143px;
+    position: static;
     z-index: 18;
     gap: 8px;
-    margin: 0 -12px;
-    padding: 10px 12px;
-    width: calc(100% + 24px);
+    margin: 0;
+    padding: 0;
+    width: 100%;
     min-width: 0;
-    background: rgba(247, 243, 236, 0.96);
-    border-bottom: 1px solid rgba(221, 213, 200, 0.72);
-    backdrop-filter: blur(14px);
+    background: transparent;
+    border-bottom: 0;
+    backdrop-filter: none;
   }
 
   body.read-only .section-head .eyebrow,
@@ -919,9 +918,6 @@ td {
   }
 
   body.read-only .section-head {
-    top: 137px;
-    margin-left: -10px;
-    margin-right: -10px;
     padding-left: 10px;
     padding-right: 10px;
   }
