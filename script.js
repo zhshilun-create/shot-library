@@ -644,7 +644,7 @@ function createCard(card) {
   if (isPublishedReadOnly) {
     node.querySelectorAll("[contenteditable]").forEach((item) => item.contentEditable = "false");
     node.querySelectorAll("select").forEach((select) => select.disabled = true);
-    node.querySelector(".card-actions").hidden = true;
+    node.querySelector(".card-actions")?.remove();
     return node;
   }
 
