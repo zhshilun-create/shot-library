@@ -812,9 +812,11 @@ td {
   }
 
   body.read-only .card-media {
+    width: 100%;
+    height: min(72vh, 520px);
     min-height: 0;
-    aspect-ratio: 9 / 16;
-    max-height: 420px;
+    aspect-ratio: auto;
+    max-height: none;
     border-radius: 8px;
   }
 
@@ -929,6 +931,6 @@ td {
   }
 
   body.read-only .card-media {
-    max-height: 380px;
+    height: min(68vh, 480px);
   }
 }
