@@ -323,6 +323,7 @@ const builtinDefaults = {
 
 const defaults = window.defaultShotLibraryState ?? builtinDefaults;
 const storageKey = "vfx-shot-library-board-v2";
+const defaultStateVersion = "export-2026-06-16-2";
 const mediaDbName = "vfx-shot-library-media";
 const mediaStoreName = "media";
 const canUseSharedApi = location.protocol === "http:" || location.protocol === "https:";
@@ -375,13 +376,18 @@ function loadState() {
   const stored = localStorage.getItem(storageKey);
   if (!stored) return migrateState(structuredClone(defaults));
   try {
-    return migrateState({ ...structuredClone(defaults), ...JSON.parse(stored) });
+    const parsed = JSON.parse(stored);
+    if (parsed.defaultStateVersion !== defaultStateVersion) {
+      return migrateState(structuredClone(defaults));
+    }
+    return migrateState({ ...structuredClone(defaults), ...parsed });
   } catch {
     return migrateState(structuredClone(defaults));
   }
 }
 
 function migrateState(nextState) {
+  nextState.defaultStateVersion = defaultStateVersion;
   const existingIds = new Set((nextState.cards ?? []).map((card) => card.id));
   const referenceCards = [...localReferenceCards, ...douyinAiTransitionCards];
   const missingReferenceCards = referenceCards.filter((card) => !existingIds.has(card.id));
