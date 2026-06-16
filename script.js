@@ -611,6 +611,7 @@ function renderCards() {
 function createCard(card) {
   const node = cardTemplate.content.firstElementChild.cloneNode(true);
   node.dataset.id = card.id;
+  node.querySelector(".card-number").textContent = card.id;
 
   const mediaSlot = node.querySelector(".card-media");
   paintMedia(mediaSlot, card.media);

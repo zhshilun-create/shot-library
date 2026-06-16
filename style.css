@@ -383,6 +383,22 @@ body.read-only .actions {
   padding: 16px;
 }
 
+.card-number {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  min-height: 34px;
+  margin: -2px -2px 0;
+  padding: 0 12px;
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  background: #f5efe4;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+}
+
 .card-media {
   min-height: 300px;
 }
@@ -804,10 +820,20 @@ td {
   body.read-only .shot-card {
     grid-template-columns: minmax(0, 1fr);
     gap: 12px;
-    padding: 12px;
+    padding: 10px 12px 12px;
     border-radius: 10px;
     box-shadow: 0 8px 20px rgba(45, 39, 28, 0.08);
     overflow: hidden;
+  }
+
+  body.read-only .card-number {
+    min-height: 38px;
+    margin: -1px -3px 0;
+    padding: 0 12px;
+    border-left-width: 5px;
+    background: #efe4d3;
+    font-size: 15px;
+    letter-spacing: 0;
   }
 
   body.read-only .card-media {
