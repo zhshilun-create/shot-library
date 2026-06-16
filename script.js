@@ -258,7 +258,7 @@ const localReferenceCards = [
 
 const builtinDefaults = {
   fields: {
-    pageTitle: "短视频特效镜头库执行单",
+    pageTitle: "李炮儿组镜头库执行单",
     goal: "建立一套可持续更新的短视频特效镜头库，用于选题策划、拍摄执行、后期制作和向领导汇报参考。",
     week1: "第 1 周：搭框架，完成 10 个样板。",
     week2: "第 2 周：扩展到 30 个特效。",
