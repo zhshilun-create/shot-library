@@ -862,7 +862,11 @@ async function paintMedia(slot, mediaRef) {
   if (!mediaRef) {
     slot.classList.remove("has-media");
     const span = document.createElement("span");
-    span.textContent = slot.classList.contains("hero-media") ? "点击添加封面图或视频" : "添加效果图/视频";
+    if (isPublishedReadOnly) {
+      span.textContent = slot.classList.contains("hero-media") ? "暂无封面素材" : "暂无参考素材";
+    } else {
+      span.textContent = slot.classList.contains("hero-media") ? "点击添加封面图或视频" : "添加效果图/视频";
+    }
     slot.append(span, input);
     return;
   }
