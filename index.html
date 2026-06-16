@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>短视频特效镜头库执行单</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Short Video VFX Library</p>
+        <h1 contenteditable="true" data-field="pageTitle">短视频特效镜头库执行单</h1>
+        <span id="modeBadge" class="mode-badge">本地模式</span>
+      </div>
+      <div class="actions">
+        <button id="addCardBtn" type="button">新增镜头</button>
+        <button id="exportBtn" type="button">导出数据</button>
+        <label class="import-btn">
+          导入数据
+          <input id="importInput" type="file" accept="application/json" />
+        </label>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>项目目标</h2>
+          <p contenteditable="true" data-field="goal">
+            建立一套可持续更新的短视频特效镜头库，用于选题策划、拍摄执行、后期制作和向领导汇报参考。
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>执行节奏</h2>
+          <ol class="timeline">
+            <li contenteditable="true" data-field="week1">第 1 周：搭框架，完成 10 个样板。</li>
+            <li contenteditable="true" data-field="week2">第 2 周：扩展到 30 个特效。</li>
+            <li contenteditable="true" data-field="week3">第 3 周：扩展到 50 个特效。</li>
+            <li contenteditable="true" data-field="week4">第 4 周：筛选 15 个常用特效，形成标准方案。</li>
+          </ol>
+        </section>
+
+        <section class="panel">
+          <h2>分类筛选</h2>
+          <div id="filters" class="filters"></div>
+        </section>
+
+        <section class="panel">
+          <h2>验收标准</h2>
+          <ul class="checklist">
+            <li contenteditable="true" data-field="check1">什么场景用？</li>
+            <li contenteditable="true" data-field="check2">前期怎么拍？</li>
+            <li contenteditable="true" data-field="check3">后期怎么做？</li>
+            <li contenteditable="true" data-field="check4">AI 提示词怎么写？</li>
+            <li contenteditable="true" data-field="check5">团队能否稳定复现？</li>
+          </ul>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Execution Board</p>
+            <h2 contenteditable="true" data-field="heroTitle">先做样板，再扩展成库</h2>
+            <p class="hero-text" contenteditable="true" data-field="heroText">
+              每个特效都要沉淀成可拍摄、可生成、可复现、可展示的标准条目。这里可以放你的项目说明、领导要求、参考博主和当前进度。
+            </p>
+            <p class="mobile-note">
+              手机端可直接点文字编辑，点图片区域替换素材。团队在线模式会保存到服务器，本地模式会保存到当前浏览器。
+            </p>
+          </div>
+          <div class="hero-media media-slot" data-media-for="hero">
+            <span>点击添加封面图或视频</span>
+            <input type="file" accept="image/*,video/*" />
+          </div>
+        </section>
+
+        <section class="section-head">
+          <div>
+            <p class="eyebrow">Shot Cards</p>
+            <h2>镜头库样板</h2>
+          </div>
+          <input id="searchInput" class="search" type="search" placeholder="搜索名称、场景、提示词..." />
+        </section>
+
+        <div id="cards" class="cards"></div>
+
+        <section class="table-section">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h2>总表视图</h2>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>编号</th>
+                  <th>分类</th>
+                  <th>特效名称</th>
+                  <th>适用场景</th>
+                  <th>难度</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <template id="cardTemplate">
+      <article class="shot-card" data-id="">
+        <div class="card-media media-slot">
+          <span>添加效果图/视频</span>
+          <input type="file" accept="image/*,video/*" />
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="shot-id" contenteditable="true"></span>
+            <select class="category"></select>
+            <select class="difficulty">
+              <option>低</option>
+              <option>中</option>
+              <option>高</option>
+            </select>
+            <select class="status">
+              <option>待收集</option>
+              <option>待校准</option>
+              <option>待测试</option>
+              <option>可复现</option>
+              <option>已淘汰</option>
+            </select>
+          </div>
+          <h3 contenteditable="true" class="title"></h3>
+          <div class="fields">
+            <label>
+              <span>适用场景</span>
+              <p contenteditable="true" class="scene"></p>
+            </label>
+            <label>
+              <span>视觉钩子</span>
+              <p contenteditable="true" class="hook"></p>
+            </label>
+            <label>
+              <span>前期怎么拍</span>
+              <p contenteditable="true" class="shoot"></p>
+            </label>
+            <label>
+              <span>需要素材</span>
+              <p contenteditable="true" class="assets"></p>
+            </label>
+            <label class="wide">
+              <span>AI 提示词</span>
+              <p contenteditable="true" class="prompt"></p>
+            </label>
+            <label class="wide">
+              <span>参考链接/备注</span>
+              <p contenteditable="true" class="notes"></p>
+            </label>
+          </div>
+          <div class="card-actions">
+            <button class="duplicate" type="button">复制</button>
+            <button class="delete ghost" type="button">删除</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>

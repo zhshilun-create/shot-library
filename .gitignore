@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+npm-debug.log*
+
+# 本地协作运行时数据
+data/*.json
+uploads/*
+!uploads/.gitkeep
