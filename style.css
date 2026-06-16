@@ -327,6 +327,10 @@ body.read-only .card-actions {
   display: none;
 }
 
+body.read-only .actions {
+  display: none;
+}
+
 .media-slot img,
 .media-slot video {
   width: 100%;
@@ -674,6 +678,189 @@ td {
   .table-section {
     display: none;
   }
+
+  body.read-only {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  body.read-only .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 25;
+    padding: 12px 14px 10px;
+    background: rgba(247, 243, 236, 0.96);
+    border-bottom: 1px solid var(--line);
+  }
+
+  body.read-only .topbar .eyebrow {
+    margin-bottom: 4px;
+    font-size: 11px;
+  }
+
+  body.read-only .topbar h1 {
+    font-size: 21px;
+    line-height: 1.18;
+  }
+
+  body.read-only .mode-badge {
+    min-height: 24px;
+    margin-top: 7px;
+    font-size: 12px;
+  }
+
+  body.read-only .layout {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  body.read-only .goal-panel,
+  body.read-only .timeline-panel,
+  body.read-only .checklist-panel,
+  body.read-only .hero,
+  body.read-only .table-section {
+    display: none;
+  }
+
+  body.read-only .sidebar {
+    display: block;
+  }
+
+  body.read-only .filter-panel {
+    position: sticky;
+    top: 83px;
+    z-index: 20;
+    padding: 10px 0 8px;
+    background: rgba(247, 243, 236, 0.96);
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: blur(14px);
+  }
+
+  body.read-only .filter-panel h2 {
+    display: none;
+  }
+
+  body.read-only .filters {
+    padding: 0 2px 4px;
+  }
+
+  body.read-only .filter {
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
+  body.read-only .workspace {
+    gap: 12px;
+  }
+
+  body.read-only .section-head {
+    position: sticky;
+    top: 143px;
+    z-index: 18;
+    gap: 8px;
+    margin: 0 -12px;
+    padding: 10px 12px;
+    background: rgba(247, 243, 236, 0.96);
+    border-bottom: 1px solid rgba(221, 213, 200, 0.72);
+    backdrop-filter: blur(14px);
+  }
+
+  body.read-only .section-head .eyebrow,
+  body.read-only .section-head h2 {
+    display: none;
+  }
+
+  body.read-only .search {
+    min-height: 42px;
+    border-radius: 999px;
+    background: #fffdf8;
+    font-size: 15px;
+  }
+
+  body.read-only .cards {
+    gap: 12px;
+  }
+
+  body.read-only .shot-card {
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(45, 39, 28, 0.08);
+  }
+
+  body.read-only .card-media {
+    min-height: 0;
+    aspect-ratio: 9 / 16;
+    max-height: 420px;
+    border-radius: 8px;
+  }
+
+  body.read-only .media-slot img,
+  body.read-only .media-slot video {
+    min-height: 0;
+  }
+
+  body.read-only .card-meta {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  body.read-only .shot-id,
+  body.read-only .card-meta select {
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 30px;
+    border-radius: 999px;
+    padding: 4px 9px;
+    font-size: 12px;
+    background: #f5efe4;
+  }
+
+  body.read-only .card-meta select {
+    max-width: 112px;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  body.read-only .card-body h3 {
+    min-height: 0;
+    margin-bottom: 10px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  body.read-only .fields {
+    gap: 9px;
+  }
+
+  body.read-only label {
+    gap: 4px;
+  }
+
+  body.read-only label span {
+    font-size: 12px;
+  }
+
+  body.read-only label p {
+    min-height: 0;
+    padding: 9px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.62;
+  }
+
+  body.read-only .prompt,
+  body.read-only .notes {
+    min-height: 0;
+  }
 }
 
 @media (max-width: 560px) {
@@ -696,5 +883,31 @@ td {
 
   .search {
     width: 100%;
+  }
+
+  body.read-only .layout,
+  body.read-only .topbar {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  body.read-only .filter-panel {
+    top: 79px;
+  }
+
+  body.read-only .section-head {
+    top: 137px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  body.read-only .shot-card {
+    padding: 10px;
+  }
+
+  body.read-only .card-media {
+    max-height: 380px;
   }
 }
