@@ -327,6 +327,7 @@ const defaultStateVersion = "export-2026-06-16-2";
 const mediaDbName = "vfx-shot-library-media";
 const mediaStoreName = "media";
 const canUseSharedApi = location.protocol === "http:" || location.protocol === "https:";
+const isPublishedReadOnly = location.hostname.endsWith("github.io");
 const knownAddedOrder = {
   "001": 1,
   "002": 2,
@@ -363,6 +364,7 @@ const modeBadge = document.querySelector("#modeBadge");
 init();
 
 function init() {
+  applyReadOnlyMode();
   bindGlobalFields();
   renderFilters();
   renderCards();
@@ -373,6 +375,7 @@ function init() {
 }
 
 function loadState() {
+  if (isPublishedReadOnly) return migrateState(structuredClone(defaults));
   const stored = localStorage.getItem(storageKey);
   if (!stored) return migrateState(structuredClone(defaults));
   try {
@@ -420,6 +423,7 @@ function getNextAddedOrder() {
 }
 
 function saveState() {
+  if (isPublishedReadOnly) return;
   try {
     localStorage.setItem(storageKey, JSON.stringify(state));
     renderTable();
@@ -431,6 +435,7 @@ function saveState() {
 
 function bindGlobalFields() {
   syncGlobalFields();
+  if (isPublishedReadOnly) return;
   document.querySelectorAll("[data-field]").forEach((node) => {
     const key = node.dataset.field;
     node.addEventListener("input", () => {
@@ -450,6 +455,7 @@ function syncGlobalFields() {
 function bindHeroMedia() {
   const slot = document.querySelector("[data-media-for='hero']");
   paintMedia(slot, state.heroMedia);
+  if (isPublishedReadOnly) return;
   slot.addEventListener("change", (event) => {
     if (!event.target.matches("input[type='file']")) return;
     saveMediaFile(event.target.files[0]).then((mediaRef) => {
@@ -464,7 +470,8 @@ function bindHeroMedia() {
 }
 
 function bindControls() {
-  document.querySelector("#addCardBtn").addEventListener("click", () => {
+  if (!isPublishedReadOnly) {
+    document.querySelector("#addCardBtn").addEventListener("click", () => {
     const next = String(state.cards.length + 1).padStart(3, "0");
     state.cards.unshift({
       id: next,
@@ -483,12 +490,15 @@ function bindControls() {
     });
     saveState();
     renderCards();
-  });
+    });
+  }
 
   document.querySelector("#searchInput").addEventListener("input", (event) => {
     searchQuery = event.target.value.trim().toLowerCase();
     renderCards();
   });
+
+  if (isPublishedReadOnly) return;
 
   document.querySelector("#exportBtn").addEventListener("click", () => {
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
@@ -521,6 +531,7 @@ function bindControls() {
 
 async function loadSharedState() {
   updateModeBadge();
+  if (isPublishedReadOnly) return;
   if (!canUseSharedApi) return;
 
   try {
@@ -543,6 +554,12 @@ async function loadSharedState() {
 
 function updateModeBadge() {
   if (!modeBadge) return;
+  if (isPublishedReadOnly) {
+    modeBadge.textContent = "只读模式";
+    modeBadge.classList.remove("online");
+    modeBadge.classList.add("readonly");
+    return;
+  }
   modeBadge.textContent = sharedMode ? "团队在线模式" : "本地模式";
   modeBadge.classList.toggle("online", sharedMode);
 }
@@ -597,17 +614,19 @@ function createCard(card) {
 
   const mediaSlot = node.querySelector(".card-media");
   paintMedia(mediaSlot, card.media);
-  mediaSlot.addEventListener("change", (event) => {
-    if (!event.target.matches("input[type='file']")) return;
-    saveMediaFile(event.target.files[0]).then((mediaRef) => {
-      if (!mediaRef) return;
-      card.media = mediaRef;
-      paintMedia(mediaSlot, mediaRef);
-      saveState();
-    }).catch(() => {
-      alert("素材保存失败。请换一个更小的 MP4/H.264 视频，或先压缩后再导入。");
+  if (!isPublishedReadOnly) {
+    mediaSlot.addEventListener("change", (event) => {
+      if (!event.target.matches("input[type='file']")) return;
+      saveMediaFile(event.target.files[0]).then((mediaRef) => {
+        if (!mediaRef) return;
+        card.media = mediaRef;
+        paintMedia(mediaSlot, mediaRef);
+        saveState();
+      }).catch(() => {
+        alert("素材保存失败。请换一个更小的 MP4/H.264 视频，或先压缩后再导入。");
+      });
     });
-  });
+  }
 
   bindEditable(node, ".shot-id", card, "id");
   bindEditable(node, ".title", card, "title");
@@ -621,6 +640,13 @@ function createCard(card) {
   bindSelect(node, ".category", card, "category", categories.filter((item) => item !== "全部"));
   bindSelect(node, ".difficulty", card, "difficulty");
   bindSelect(node, ".status", card, "status");
+
+  if (isPublishedReadOnly) {
+    node.querySelectorAll("[contenteditable]").forEach((item) => item.contentEditable = "false");
+    node.querySelectorAll("select").forEach((select) => select.disabled = true);
+    node.querySelector(".card-actions").hidden = true;
+    return node;
+  }
 
   node.querySelector(".duplicate").addEventListener("click", () => {
     const copy = structuredClone(card);
@@ -645,6 +671,7 @@ function createCard(card) {
 function bindEditable(root, selector, card, key) {
   const node = root.querySelector(selector);
   node.textContent = card[key] ?? "";
+  if (isPublishedReadOnly) return;
   node.addEventListener("input", () => {
     card[key] = node.textContent.trim();
     saveState();
@@ -662,12 +689,27 @@ function bindSelect(root, selector, card, key, options) {
     });
   }
   select.value = card[key];
+  if (isPublishedReadOnly) {
+    select.disabled = true;
+    return;
+  }
   select.addEventListener("change", () => {
     card[key] = select.value;
     saveState();
     renderFilters();
     renderTable();
   });
+}
+
+function applyReadOnlyMode() {
+  if (!isPublishedReadOnly) return;
+  document.body.classList.add("read-only");
+  document.querySelectorAll("[contenteditable]").forEach((node) => node.contentEditable = "false");
+  document.querySelector(".actions")?.remove();
+  const mobileNote = document.querySelector(".mobile-note");
+  if (mobileNote) {
+    mobileNote.textContent = "当前为团队只读展示版本。如需更新镜头库，请在本地编辑后重新发布。";
+  }
 }
 
 function renderTable() {
