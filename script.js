@@ -256,7 +256,7 @@ const localReferenceCards = [
   }
 ];
 
-const defaults = {
+const builtinDefaults = {
   fields: {
     pageTitle: "短视频特效镜头库执行单",
     goal: "建立一套可持续更新的短视频特效镜头库，用于选题策划、拍摄执行、后期制作和向领导汇报参考。",
@@ -321,7 +321,8 @@ const defaults = {
   ]
 };
 
-const storageKey = "vfx-shot-library-board";
+const defaults = window.defaultShotLibraryState ?? builtinDefaults;
+const storageKey = "vfx-shot-library-board-v2";
 const mediaDbName = "vfx-shot-library-media";
 const mediaStoreName = "media";
 const canUseSharedApi = location.protocol === "http:" || location.protocol === "https:";
@@ -394,6 +395,10 @@ function migrateState(nextState) {
 function normalizeAddedOrder(cards) {
   let nextOrder = Math.max(0, ...cards.map((card) => knownAddedOrder[card.id] ?? Number(card.addedOrder) ?? 0)) + 1;
   cards.forEach((card, index) => {
+    if (Number.isFinite(Number(card.addedOrder))) {
+      card.addedOrder = Number(card.addedOrder);
+      return;
+    }
     if (knownAddedOrder[card.id]) {
       card.addedOrder = knownAddedOrder[card.id];
       return;
